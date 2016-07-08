@@ -13,17 +13,19 @@ RU Russia
 CA Canada
 */
 
+// комент для теста
+
 public class Solution {
     private static Map<String,String> countries = new HashMap<String,String>();
-
+    // инициализуем список стран
     static {
         countries.put("UA", "Ukraine");
         countries.put("RU", "Russia");
         countries.put("CA", "Canada");
     }
-
+    // проверочный PSVM
     public static void main (String[] args) {
-
+        // тестовый адаптер dataAdapter
         DataAdapter dataAdapter = new DataAdapter(new Customer()
         {
             @Override
@@ -45,7 +47,7 @@ public class Solution {
             @Override
             public String getPhoneNumber() { return "+38(050)123-45-67"; }
         });
-
+        // все его методы
         System.out.println(dataAdapter.getCountryCode());
         System.out.println(dataAdapter.getCompany());
         System.out.println(dataAdapter.getContactFirstName());
@@ -54,18 +56,18 @@ public class Solution {
     }
 
     public static class DataAdapter implements RowItem {
-
+        // сохраняем исходные данные
         private Customer customer;
         private Contact contact;
-
+        // в конструкторе адаптера используем исходные интерфейсы
         public DataAdapter(Customer customer, Contact contact) {
             this.customer = customer;
             this.contact = contact;
         }
-
+        // оверайдим методы
         @Override
         public String getCountryCode()
-        {
+        {   // поиск по значению, выдача ключа
             String countryName = "";
             for (Map.Entry<String, String> pair : countries.entrySet()) {
                 if (customer.getCountryName().equals(pair.getValue()))
@@ -82,14 +84,14 @@ public class Solution {
 
         @Override
         public String getContactFirstName()
-        {
+        {   // имя, все что идет после ", "
             String firstName = contact.getName();
             return firstName.substring(firstName.lastIndexOf(" ") + 1);
         }
 
         @Override
         public String getContactLastName()
-        {
+        {   // фамилия, все что до ","
             String lastName = contact.getName();
             return lastName.substring(0, lastName.lastIndexOf(","));
         }
@@ -98,11 +100,11 @@ public class Solution {
         public String getDialString()
         {
             String phoneNumber = contact.getPhoneNumber();
-            String countryCode = phoneNumber.substring(0, phoneNumber.lastIndexOf("("));
-            String cityCode = phoneNumber.substring(phoneNumber.lastIndexOf("(") + 1, phoneNumber.lastIndexOf(")"));
-            String[] number = phoneNumber.substring(phoneNumber.lastIndexOf(")") + 1).split("-");
+            String countryCode = phoneNumber.substring(0, phoneNumber.lastIndexOf("(")); // код страны, до скобки
+            String cityCode = phoneNumber.substring(phoneNumber.lastIndexOf("(") + 1, phoneNumber.lastIndexOf(")")); // код города, то что в скобках
+            String[] number = phoneNumber.substring(phoneNumber.lastIndexOf(")") + 1).split("-"); // номер телефона, все что после скобок
             String num = "";
-            for (String s : number) num += s;
+            for (String s : number) num += s; // убираем лишние "-"
             return "callto://" + countryCode + cityCode + num;
         }
     }
