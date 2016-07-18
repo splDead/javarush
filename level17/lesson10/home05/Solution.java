@@ -4,30 +4,34 @@ package com.javarush.test.level17.lesson10.home05;
 synchronized существенно замедляет программу, поэтому убери избыточность synchronized внутри методов
 */
 
+/*
+В решении этой задачи есть логика. Намного проще, чем предыдущая, плюс в самом задании подсказка.
+Если у нас метод синхронизирован, то уже внутри ничего синхронизировать не нужно.
+Создавать объект и по нему чего-то синхронизировать — явная ерунда.
+Синхронизировать весь класс нужно только когда есть что-то статическое.
+Синхронизировать атомарную операцию не нужно.
+Синхронизировать применение синхронизированного метода не нужно.
+Единственное, что осталось под вопросом, — оно смотрится неестественно,
+т.к. по идее программа не должна проходить через точку синхронизации миллион раз.
+Поэтому ее тоже удаляем — и вуаля, метод научного тыка рулит :)
+ */
+
 public class Solution {
     char[] value;
     int count;
 
     public Solution append(CharSequence s) {
-        synchronized (Solution.class) {
             if (s == null) {
-                synchronized (this) {
                     s = "null";
-                }
             }
 
             if (s instanceof String) {
-                synchronized (this) {
                     return this.append((String) s);
-                }
             }
 
             if (s instanceof Solution) {
-                synchronized (this) {
                     return this.appendThis((Solution) s);
-                }
             }
-        }
         return this.append(s);
     }
 
@@ -45,21 +49,15 @@ public class Solution {
 
     private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
         java.io.ObjectOutputStream.PutField fields = s.putFields();
-        synchronized (fields) {
             fields.put("value", value);
             fields.put("count", count);
             fields.put("shared", false);
-        }
-        synchronized (s) {
             s.writeFields();
-        }
     }
 
     private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
-        synchronized (new java.io.IOException()) {
             java.io.ObjectInputStream.GetField fields = s.readFields();
             value = (char[]) fields.get("value", null);
             count = fields.get("count", 0);
-        }
     }
 }
