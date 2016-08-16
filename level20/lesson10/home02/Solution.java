@@ -9,7 +9,7 @@ import java.io.Serializable;
 Десериализуйте объект в методе getOriginalObject предварительно определив, какого именно типа там объект.
 Реализуйте интерфейс Serializable где необходимо.
 */
-// Так как класс внутренний и нестатический, маркеруем Solution сериализуемым
+// Так как класс А внутренний и нестатический, маркеруем Solution сериализуемым
 public class Solution implements Serializable {
     public A getOriginalObject(ObjectInputStream objectStream) throws IOException, ClassNotFoundException
     {
