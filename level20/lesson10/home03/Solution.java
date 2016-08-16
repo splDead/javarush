@@ -43,7 +43,7 @@ public class Solution {
     public static class A {
         protected String name = "A";
 
-        public A() {}
+        public A() {} // конструктор без параметров необходим для правильной работы протокола сериализации
 
         public A(String name) {
             this.name += name;
