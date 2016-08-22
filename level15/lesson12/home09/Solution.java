@@ -25,43 +25,51 @@ double 3.14
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class Solution {
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) {
         //add your code here
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String URL = reader.readLine(); //получаем URL
-        String parseUrl [] = URL.split("[?&]"); //переводим строку в массив
+        try
+        {
+            String url = reader.readLine();
+            while (!url.equals(""))
+            {
+                int pos = url.indexOf("?");
+                String tmp = url.substring(pos + 1, url.length());
+                String[] mas = tmp.split("&");
+                for (String s : mas)
+                {
+                    if (s.contains("obj"))
+                    {
+                        int pos1 = s.indexOf("=");
+                        String doRavno = s.substring(0, pos1);
+                        alert(doRavno);
+                        String posle = s.substring(pos + 1, s.length());
+                        if (posle.contains("."))
+                        {
+                            alert(Double.parseDouble(posle));
+                        }
+                    }
+                    else
+                    {
 
-        ArrayList<String> obj = new ArrayList<String>();
+                    }
+                }
+//                for (String s : mas)
+//                    System.out.println(s);
 
-        for (int i = 1; i < parseUrl.length; i++) {
-            if(parseUrl[i].startsWith("obj")) {
-                obj.add(parseUrl[i].split("=")[1]);
+                url = reader.readLine();
             }
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
 
-        ArrayList<String> alert = new ArrayList<String>();
-
-        for (int i = 1; i < parseUrl.length; i++) {
-            alert.add(parseUrl[i].split("=")[0]);
-        }
-
-        for (String a : alert ){
-            System.out.print(a + " ");
-        }
-        System.out.println();
-
-        for (String x : obj) {
-            try {
-                alert(Double.parseDouble(x));
-            } catch (Exception e){
-                alert(x);
-            }
-        }
     }
+
 
     public static void alert(double value) {
         System.out.println("double " + value);
