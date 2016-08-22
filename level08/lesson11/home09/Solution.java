@@ -15,21 +15,10 @@ public class Solution
 {
     public static void main(String[] args)
     {
-        isDateOdd("MAY 2 2013");
     }
 
     public static boolean isDateOdd(String date)
     {
-        Date date1 = new Date(date);
-        Date date2 = new Date(date);
-        date1.setHours(0);
-        date1.setMinutes(0);
-        date1.setSeconds(0);
-        date1.setDate(1);
-        date1.setMonth(0);
-        long msTimeDistance = date2.getTime() - date1.getTime();
-        long msDay = 24 * 60 * 60 * 1000;
-        int y = (int)(msTimeDistance/msDay);
-        return (y % 2 == 0);
+        return true;
     }
 }
