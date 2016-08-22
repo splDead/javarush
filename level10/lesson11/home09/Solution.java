@@ -11,7 +11,7 @@ import java.util.Map;
 Результат нужно представить в виде словаря Map<String, Integer>, где первый параметр – уникальная строка,
 а второй – число, сколько раз данная строка встречалась в списке.
 Вывести содержимое словаря на экран.
-В тестах регистр (большая/маленькая буква) влияет на результат.
+В тестах регистр (большая/маленькая буква) не влияет на результат.
 */
 
 public class Solution
@@ -39,19 +39,15 @@ public class Solution
         HashMap<String, Integer> result = new HashMap<String, Integer>();
 
         //напишите тут ваш код
-        //начальное значение, с которым идет сравнение
-        result.put(list.get(0), 1);
-
-        for (int i = 1; i < list.size(); i++) {
-            if (result.containsKey(list.get(i))) { //проверяем наличие ключа в словаре
-                int value = result.get(list.get(i));
-                result.put(list.get(i), value + 1); //увеличиваем значение на 1
-            }
-            else {
-                result.put(list.get(i), 1); //если нету совпадений по ключу, то добавляем новый со значением 1
-            }
+        for (int i = 0; i < list.size(); i++)
+        {
+            int count = 0;
+            String text = list.get(i).toLowerCase();
+            for (int j = 0; j < list.size(); j++)
+                if (text == list.get(j).toLowerCase())
+                    count++;
+            result.put(list.get(i), count);
         }
-
         return result;
     }
 
