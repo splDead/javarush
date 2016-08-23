@@ -1,5 +1,8 @@
 package com.javarush.test.level16.lesson13.bonus02;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,4 +20,115 @@ import java.util.List;
 
 public class Solution {
     public static List<Thread> threads = new ArrayList<Thread>(5);
+
+    static {
+        threads.add(new Thread1());
+        threads.add(new Thread2());
+        threads.add(new Thread3());
+        threads.add(new Thread4());
+        threads.add(new Thread5());
+    }
+
+    // Первая нить выполняется бесконечно, но ничего не делая ))
+    static class Thread1 extends Thread {
+        @Override
+        public void run()
+        {
+            while (true) {
+
+            }
+        }
+    }
+
+    // Вторая нить кидает эксепш
+    static class Thread2 extends Thread {
+        @Override
+        public void run()
+        {
+            try {
+                while (!isInterrupted()) {
+
+                }
+
+                throw new InterruptedException();
+            } catch (InterruptedException e) {
+                System.out.println("InterruptedException");
+            }
+        }
+    }
+
+    // Третья нить спамит в консоль ура, очень круто)
+    static class Thread3 extends Thread {
+        @Override
+        public void run()
+        {
+            while (true) {
+                System.out.println("Ура");
+                try
+                {
+                    Thread.sleep(500);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // Четвертая нить ждет, чтобы ее отинтерруптили )) з.ы. подсказка насчет этой нити не понадобилась
+    static class Thread4 extends Thread implements Message {
+        @Override
+        public void run()
+        {
+            while (!isInterrupted()) {
+
+            }
+        }
+
+        @Override
+        public void showWarning()
+        {
+            try
+            {
+                interrupt();
+                join();
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Пятая нить, почти калькулятор. Имхо, использование эксепшена как логики программы не айс
+    static class Thread5 extends Thread {
+        @Override
+        public void run()
+        {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            int sum = 0;
+
+            try
+            {
+                while (true) {
+                    String s = bufferedReader.readLine();
+                    try
+                    {
+                        sum += Integer.parseInt(s);
+                    } catch (Exception e) {
+                        if ("N".equals(s))
+                            break;
+                    }
+                    sum += Integer.parseInt(bufferedReader.readLine());
+                }
+
+                System.out.println(sum);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 }
