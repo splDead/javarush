@@ -3,9 +3,6 @@ package com.javarush.test.level09.lesson11.bonus03;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /* Задача по алгоритмам
 Задача: Пользователь вводит с клавиатуры список слов (и чисел). Слова вывести в возрастающем порядке, числа - в убывающем.
@@ -54,20 +51,48 @@ public class Solution
     public static void sort(String[] array)
     {
         //напишите тут ваш код
-        //проверяем число или строка
-        for (int i = 0; i < array.length; i++) {
-            if (isNumber(array[i])) {
-                int temp = Integer.parseInt(array[i]); //сохраняем переменную число
-                if (isNumber(array[i + 1])) {
-                    if (temp < Integer.parseInt(array[i + 1])) {
-                        temp = Integer.parseInt(array[i + 1]);
-                        array[i] = array[i + 1];
-                    }
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<String> list2 = new ArrayList<>();
+
+        // Делим массив на строки и числа
+        for (String s : array) {
+            if (isNumber(s))
+                list1.add(Integer.parseInt(s));
+            else
+                list2.add(s);
+        }
+
+        // Пузырьком сортируем числа в обратном порядке
+        for (int i = 0; i < list1.size(); i++) {
+            for (int j = i + 1; j < list1.size(); j++) {
+                int num = list1.get(i);
+                if (num < list1.get(j)) {
+                    list1.set(i, list1.get(j));
+                    list1.set(j, num);
                 }
             }
-            else {
-                String s = array[i]; //сохраняем переменную строку
+        }
 
+        // Пузырьком сортируем слова по алфавиту
+        for (int i = 0; i < list2.size(); i++) {
+            for (int j = i + 1; j < list2.size(); j++) {
+                String s = list2.get(i);
+                if (isGreaterThan(s, list2.get(j))) {
+                    list2.set(i, list2.get(j));
+                    list2.set(j, s);
+                }
+            }
+        }
+
+        // На основе списков переписываем исходный массив
+        for (int i = 0; i < array.length; i++) {
+            if (isNumber(array[i])) {
+                array[i] = list1.get(0).toString();
+                list1.remove(0);
+            }
+            else {
+                array[i] = list2.get(0);
+                list2.remove(0);
             }
         }
     }
